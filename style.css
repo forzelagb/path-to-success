@@ -239,6 +239,25 @@ body {
     animation: statPulse 0.6s ease;
 }
 
+.random-btn {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 18px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #cbd5e1;
+    transition: 0.3s ease;
+}
+
+.random-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
 @keyframes fadeIn {
     from {
         opacity: 0;

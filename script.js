@@ -15,6 +15,7 @@ let currentScene = "start";
 const moneyEl = document.getElementById("money");
 const energyEl = document.getElementById("energy");
 const reputationEl = document.getElementById("reputation");
+const randomBtn = document.getElementById("random-btn");
 
 const moneyFillEl = document.getElementById("money-fill");
 const energyFillEl = document.getElementById("energy-fill");
@@ -244,11 +245,13 @@ function updateStats(previousStats = null) {
 
 function applyEffects(effects) {
     const previousStats = { ...player };
+    console.log("Было:", previousStats);
 
     player.money = Math.max(0, player.money + effects.money);
     player.energy = Math.max(0, player.energy + effects.energy);
     player.reputation = Math.max(0, player.reputation + effects.reputation);
 
+    console.log("Стало:", player);
     return previousStats;
 }
 
@@ -258,6 +261,8 @@ function createChoiceButton(choice) {
     button.textContent = choice.text;
 
     button.addEventListener("click", () => {
+        console.log("Нажат выбор:", choice.text);
+        console.log("Переход к сцене:", choice.nextScene);
         const previousStats = applyEffects(choice.effects);
         currentScene = choice.nextScene;
 
@@ -279,6 +284,7 @@ function renderChoices(choices) {
 function showScene(sceneKey, previousStats = null) {
     const scene = scenes[sceneKey];
     restartBtn.style.display = "none";
+    randomBtn.style.display = "block";
 
     sceneTitleEl.textContent = scene.title;
     sceneTextEl.textContent = scene.text;
@@ -335,10 +341,12 @@ function showEnding(previousStats = null) {
     sceneTitleEl.textContent = ending.title;
     sceneTextEl.textContent = ending.text;
     sceneImageEl.src = ending.image;
+    
 
     animateScene();
     choicesEl.innerHTML = "";
     restartBtn.style.display = "none";
+    randomBtn.style.display = "none";
 
     const continueBtn = document.createElement("button");
     continueBtn.className = "choice-btn";
@@ -364,6 +372,25 @@ function showEnding(previousStats = null) {
     choicesEl.appendChild(continueBtn);
     updateStats(previousStats);
 }
+function playRandomChoice() {
+    const scene = scenes[currentScene];
+
+    if (!scene || !scene.choices || scene.choices.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * scene.choices.length);
+    const randomChoice = scene.choices[randomIndex];
+
+    console.log("Случайный выбор:", randomChoice.text);
+
+    const previousStats = applyEffects(randomChoice.effects);
+    currentScene = randomChoice.nextScene;
+
+    if (currentScene === "ending") {
+        showEnding(previousStats);
+    } else {
+        showScene(currentScene, previousStats);
+    }
+}
 
 restartBtn.addEventListener("click", () => {
     player.money = 100;
@@ -371,7 +398,8 @@ restartBtn.addEventListener("click", () => {
     player.reputation = 0;
     currentScene = "start";
     restartBtn.style.display = "none";
+
     showScene(currentScene);
 });
-
+randomBtn.addEventListener("click", playRandomChoice);
 showScene(currentScene);
