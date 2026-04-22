@@ -4,11 +4,21 @@ const player = {
     reputation: 0
 };
 
+const MAX_STATS = {
+    money: 300,
+    energy: 100,
+    reputation: 100
+};
+
 let currentScene = "start";
 
 const moneyEl = document.getElementById("money");
 const energyEl = document.getElementById("energy");
 const reputationEl = document.getElementById("reputation");
+
+const moneyFillEl = document.getElementById("money-fill");
+const energyFillEl = document.getElementById("energy-fill");
+const reputationFillEl = document.getElementById("reputation-fill");
 
 const sceneImageEl = document.getElementById("scene-image");
 const sceneTitleEl = document.getElementById("scene-title");
@@ -20,6 +30,7 @@ const restartBtn = document.getElementById("restart-btn");
 const moneyBox = document.getElementById("money-box");
 const energyBox = document.getElementById("energy-box");
 const reputationBox = document.getElementById("reputation-box");
+
 const scenes = {
     start: {
         title: "Обычный день, необычные амбиции",
@@ -182,25 +193,29 @@ const scenes = {
         ]
     }
 };
-function updateStats(previousStats = null) {
-    moneyEl.textContent = player.money;
-    energyEl.textContent = player.energy;
-    reputationEl.textContent = player.reputation;
 
-    if (previousStats) {
-        highlightStatChange(moneyBox, player.money - previousStats.money);
-        highlightStatChange(energyBox, player.energy - previousStats.energy);
-        highlightStatChange(reputationBox, player.reputation - previousStats.reputation);
-    }
+function setProgress(element, value, maxValue) {
+    const percent = Math.max(0, Math.min((value / maxValue) * 100, 100));
+    element.style.width = `${percent}%`;
 }
+
+function animateScene() {
+    [sceneTitleEl, sceneTextEl].forEach(el => {
+        el.classList.remove("fade-text");
+        void el.offsetWidth;
+        el.classList.add("fade-text");
+    });
+
+    sceneImageEl.classList.remove("fade-in");
+    void sceneImageEl.offsetWidth;
+    sceneImageEl.classList.add("fade-in");
+}
+
 function highlightStatChange(element, change) {
     element.classList.remove("good-change", "bad-change", "stat-updated");
 
-    if (change > 0) {
-        element.classList.add("good-change");
-    } else if (change < 0) {
-        element.classList.add("bad-change");
-    }
+    if (change > 0) element.classList.add("good-change");
+    if (change < 0) element.classList.add("bad-change");
 
     if (change !== 0) {
         element.classList.add("stat-updated");
@@ -210,6 +225,57 @@ function highlightStatChange(element, change) {
         }, 700);
     }
 }
+
+function updateStats(previousStats = null) {
+    moneyEl.textContent = player.money;
+    energyEl.textContent = player.energy;
+    reputationEl.textContent = player.reputation;
+
+    setProgress(moneyFillEl, player.money, MAX_STATS.money);
+    setProgress(energyFillEl, player.energy, MAX_STATS.energy);
+    setProgress(reputationFillEl, player.reputation, MAX_STATS.reputation);
+
+    if (previousStats) {
+        highlightStatChange(moneyBox, player.money - previousStats.money);
+        highlightStatChange(energyBox, player.energy - previousStats.energy);
+        highlightStatChange(reputationBox, player.reputation - previousStats.reputation);
+    }
+}
+
+function applyEffects(effects) {
+    const previousStats = { ...player };
+
+    player.money = Math.max(0, player.money + effects.money);
+    player.energy = Math.max(0, player.energy + effects.energy);
+    player.reputation = Math.max(0, player.reputation + effects.reputation);
+
+    return previousStats;
+}
+
+function createChoiceButton(choice) {
+    const button = document.createElement("button");
+    button.className = "choice-btn";
+    button.textContent = choice.text;
+
+    button.addEventListener("click", () => {
+        const previousStats = applyEffects(choice.effects);
+        currentScene = choice.nextScene;
+
+        if (currentScene === "ending") {
+            showEnding(previousStats);
+        } else {
+            showScene(currentScene, previousStats);
+        }
+    });
+
+    return button;
+}
+
+function renderChoices(choices) {
+    choicesEl.innerHTML = "";
+    choices.forEach(choice => choicesEl.appendChild(createChoiceButton(choice)));
+}
+
 function showScene(sceneKey, previousStats = null) {
     const scene = scenes[sceneKey];
     restartBtn.style.display = "none";
@@ -218,113 +284,67 @@ function showScene(sceneKey, previousStats = null) {
     sceneTextEl.textContent = scene.text;
     sceneImageEl.src = scene.image;
 
-    sceneTitleEl.classList.remove("fade-text");
-    sceneTextEl.classList.remove("fade-text");
-    sceneImageEl.classList.remove("fade-in");
-
-    void sceneTitleEl.offsetWidth;
-    void sceneTextEl.offsetWidth;
-    void sceneImageEl.offsetWidth;
-
-    sceneTitleEl.classList.add("fade-text");
-    sceneTextEl.classList.add("fade-text");
-    sceneImageEl.classList.add("fade-in");
-
-    choicesEl.innerHTML = "";
-
-    scene.choices.forEach(choice => {
-        const button = document.createElement("button");
-        button.classList.add("choice-btn");
-        button.textContent = choice.text;
-
-        button.addEventListener("click", function () {
-            const previousStats = applyEffects(choice.effects);
-            currentScene = choice.nextScene;
-
-            if (currentScene === "ending") {
-                showEnding(previousStats);
-            } else {
-                showScene(currentScene, previousStats);
-            }
-        });
-
-        choicesEl.appendChild(button);
-    });
-
+    animateScene();
+    renderChoices(scene.choices);
     updateStats(previousStats);
 }
-function applyEffects(effects) {
-    const previousStats = {
-        money: player.money,
-        energy: player.energy,
-        reputation: player.reputation
-    };
 
-    player.money += effects.money;
-    player.energy += effects.energy;
-    player.reputation += effects.reputation;
-
-    if (player.money < 0) player.money = 0;
-    if (player.energy < 0) player.energy = 0;
-    if (player.reputation < 0) player.reputation = 0;
-
-    return previousStats;
-}
-function showEnding(previousStats = null) {
-    let endingTitle = "";
-    let endingText = "";
-    let endingImage = "";
-
+function getEndingData() {
     if (player.money >= 250 && player.reputation >= 70) {
-        endingTitle = "Ты — магнат";
-        endingText = "Ты прошёл путь от обычного студента до человека, который уверенно принимает решения, строит своё дело и уже не смотрит на цену кофе. У тебя есть деньги, репутация и ощущение, что всё было не зря.";
-        endingImage = "images/ending-rich.jpg";
-    } 
-    else if (player.reputation >= 80 && player.money >= 120) {
-        endingTitle = "Ты — успешный специалист";
-        endingText = "Ты не стал магнатом, но стал человеком, которого уважают за навыки, опыт и умение делать дело. Это уже серьёзный успех, и ты явно двигаешься в правильную сторону.";
-        endingImage = "images/ending-pro.jpg";
-    } 
-    else if (player.money >= 120 && player.energy >= 40) {
-        endingTitle = "Стабильная и уверенная жизнь";
-        endingText = "Ты выбрал более спокойный путь. Без громких заголовков и золотых небоскрёбов, зато с нормальным доходом, устойчивостью и пониманием, куда двигаться дальше. Иногда стабильность — это тоже победа.";
-        endingImage = "images/ending-stable.jpg";
-    } 
-    else if (player.reputation >= 40) {
-        endingTitle = "Опытный, но пока не богатый";
-        endingText = "Финансово ты ещё не на вершине, но у тебя уже есть главное — опыт, навыки и понимание того, как устроен путь к успеху. А ещё пару очень поучительных историй, которые лучше не повторять.";
-        endingImage = "images/ending-experience.jpg";
-    } 
-    else {
-        endingTitle = "Поражение... но с сюжетом";
-        endingText = "Ты столкнулся с трудностями и пока не добрался до желаемого результата. Возможно, где-то ты слишком рисковал, где-то рано сдался, а где-то просто нажал не ту кнопку. Но любой провал — это тоже часть пути.";
-        endingImage = "images/ending-fail.jpg";
+        return {
+            title: "Ты — магнат",
+            text: "Ты прошёл путь от обычного студента до человека, который уверенно принимает решения, строит своё дело и уже не смотрит на цену кофе. У тебя есть деньги, репутация и ощущение, что всё было не зря.",
+            image: "images/ending-rich.jpg"
+        };
     }
 
-    sceneTitleEl.textContent = endingTitle;
-    sceneTextEl.textContent = endingText;
-    sceneImageEl.src = endingImage;
+    if (player.reputation >= 80 && player.money >= 120) {
+        return {
+            title: "Ты — успешный специалист",
+            text: "Ты не стал магнатом, но стал человеком, которого уважают за навыки, опыт и умение делать дело. Это уже серьёзный успех, и ты явно двигаешься в правильную сторону.",
+            image: "images/ending-pro.jpg"
+        };
+    }
 
-    sceneTitleEl.classList.remove("fade-text");
-    sceneTextEl.classList.remove("fade-text");
-    sceneImageEl.classList.remove("fade-in");
+    if (player.money >= 120 && player.energy >= 40) {
+        return {
+            title: "Стабильная и уверенная жизнь",
+            text: "Ты выбрал более спокойный путь. Без громких заголовков и золотых небоскрёбов, зато с нормальным доходом, устойчивостью и пониманием, куда двигаться дальше. Иногда стабильность — это тоже победа.",
+            image: "images/ending-stable.jpg"
+        };
+    }
 
-    void sceneTitleEl.offsetWidth;
-    void sceneTextEl.offsetWidth;
-    void sceneImageEl.offsetWidth;
+    if (player.reputation >= 40) {
+        return {
+            title: "Опытный, но пока не богатый",
+            text: "Финансово ты ещё не на вершине, но у тебя уже есть главное — опыт, навыки и понимание того, как устроен путь к успеху. А ещё пару очень поучительных историй, которые лучше не повторять.",
+            image: "images/ending-experience.jpg"
+        };
+    }
 
-    sceneTitleEl.classList.add("fade-text");
-    sceneTextEl.classList.add("fade-text");
-    sceneImageEl.classList.add("fade-in");
+    return {
+        title: "Поражение... но с сюжетом",
+        text: "Ты столкнулся с трудностями и пока не добрался до желаемого результата. Возможно, где-то ты слишком рисковал, где-то рано сдался, а где-то просто нажал не ту кнопку. Но любой провал — это тоже часть пути.",
+        image: "images/ending-fail.jpg"
+    };
+}
 
+function showEnding(previousStats = null) {
+    const ending = getEndingData();
+
+    sceneTitleEl.textContent = ending.title;
+    sceneTextEl.textContent = ending.text;
+    sceneImageEl.src = ending.image;
+
+    animateScene();
     choicesEl.innerHTML = "";
     restartBtn.style.display = "none";
 
     const continueBtn = document.createElement("button");
-    continueBtn.classList.add("choice-btn");
+    continueBtn.className = "choice-btn";
     continueBtn.textContent = "Осмыслить свой путь";
 
-    continueBtn.addEventListener("click", function () {
+    continueBtn.addEventListener("click", () => {
         sceneTitleEl.textContent = "Итог твоего пути";
         sceneTextEl.textContent =
             "Ты получил своё место в этом мире.\n\n" +
@@ -335,48 +355,17 @@ function showEnding(previousStats = null) {
             "А значит, всё только начинается.";
         sceneImageEl.src = "images/final-smile.jpg";
 
-        sceneTitleEl.classList.remove("fade-text");
-        sceneTextEl.classList.remove("fade-text");
-        sceneImageEl.classList.remove("fade-in");
-
-        void sceneTitleEl.offsetWidth;
-        void sceneTextEl.offsetWidth;
-        void sceneImageEl.offsetWidth;
-
-        sceneTitleEl.classList.add("fade-text");
-        sceneTextEl.classList.add("fade-text");
-        sceneImageEl.classList.add("fade-in");
-
+        animateScene();
         choicesEl.innerHTML = "";
         restartBtn.style.display = "block";
-
         updateStats(previousStats);
     });
 
     choicesEl.appendChild(continueBtn);
-
     updateStats(previousStats);
 }
-function showFinalReflection() {
-    sceneTitleEl.textContent = "Итог твоего пути";
 
-    sceneTextEl.textContent =
-        "Ты прошёл свой путь.\n\n" +
-        "Где-то было легко, где-то — сложно.\n" +
-        "Иногда ты принимал правильные решения, иногда — нет.\n\n" +
-        "Но самое главное — ты не остановился.\n\n" +
-        "Именно это и определяет результат.\n\n" +
-        "Путь продолжается.";
-
-    sceneImageEl.src = "images/final-smile.jpg";
-
-    choicesEl.innerHTML = "";
-
-    restartBtn.style.display = "block";
-
-    updateStats();
-}
-restartBtn.addEventListener("click", function () {
+restartBtn.addEventListener("click", () => {
     player.money = 100;
     player.energy = 100;
     player.reputation = 0;
