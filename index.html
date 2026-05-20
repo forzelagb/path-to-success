@@ -3,80 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Путь к успеху</title>
+    <title>От студента до миллионера</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="page-glow glow-1"></div>
-    <div class="page-glow glow-2"></div>
+    <main class="container">
+        <nav class="menu">
+            <a href="index.html" class="active">Игра</a>
+            <a href="guide.html">Как играть</a>
+            <a href="endings.html">Финалы</a>
+        </nav>
 
-    <main class="game-container">
-        <nav class="navbar card">
-    <a href="index.html" class="nav-link active">Главная</a>
-    <a href="guide.html" class="nav-link">Как играть</a>
-    <a href="endings.html" class="nav-link">Финалы</a>
-</nav>
-        <header class="hero card">
-            <p class="hero-badge">Интерактивная история</p>
-            <h1 class="game-title">Путь к успеху: от студента до магната</h1>
-            <p class="hero-subtitle">
-                Принимай решения, следи за ресурсами и попробуй привести героя к лучшему финалу.
-            </p>
+        <header class="header">
+            <h1>От студента до миллионера</h1>
+            <p>Принимай решения и попробуй привести героя к успеху</p>
         </header>
 
-        <section class="top-section">
-            <div class="image-block card">
-                <img id="scene-image" src="images/start.jpg" alt="Сцена игры">
+        <section class="game-card">
+            <img id="scene-image" src="images/start.jpg" alt="Ситуация">
+
+            <div class="game-info">
+                <section class="stats">
+<div class="stat">
+    <span>Деньги</span>
+
+    <div class="stat-line">
+        <strong id="money">100</strong>
+        <small id="money-change"></small>
+    </div>
+</div>
+<div class="stat">
+    <span>Энергия</span>
+
+    <div class="stat-line">
+        <strong id="energy">100</strong>
+        <small id="energy-change"></small>
+    </div>
+</div>
+<div class="stat">
+    <span>Репутация</span>
+
+    <div class="stat-line">
+        <strong id="reputation">0</strong>
+        <small id="reputation-change"></small>
+    </div>
+</div>
+                </section>
+
+                <h2 id="scene-title">Начало пути</h2>
+
+                <p id="scene-text">
+                    Ты обычный студент. Денег немного, энергии хватает, но хочется добиться большего.
+                    Какой первый шаг выберешь?
+                </p>
+
+                <div id="choices" class="choices">
+                    <button>Учиться и развивать навыки</button>
+                    <button>Пойти на подработку</button>
+                    <button>Попробовать открыть бизнес</button>
+                </div>
             </div>
-
-            <aside class="stats-panel">
-                <div class="stat-box card" id="money-box">
-                    <div class="stat-top">
-                        <span class="stat-label">Деньги</span>
-                        <span id="money" class="stat-value">100</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-fill money-fill" id="money-fill"></div>
-                    </div>
-                </div>
-
-                <div class="stat-box card" id="energy-box">
-                    <div class="stat-top">
-                        <span class="stat-label">Энергия</span>
-                        <span id="energy" class="stat-value">100</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-fill energy-fill" id="energy-fill"></div>
-                    </div>
-                </div>
-
-                <div class="stat-box card" id="reputation-box">
-                    <div class="stat-top">
-                        <span class="stat-label">Репутация</span>
-                        <span id="reputation" class="stat-value">0</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-fill reputation-fill" id="reputation-fill"></div>
-                    </div>
-                </div>
-            </aside>
         </section>
-
-        <section class="story-block card">
-            <h2 id="scene-title">Обычный день, необычные амбиции</h2>
-            <p id="scene-text">
-                Ты обычный студент. Денег немного, амбиций много, а планов ещё больше.
-                Пора что-то менять и начинать путь к успеху.
-            </p>
-        </section>
-
-        <section id="choices" class="choices">
-            <button class="choice-btn">Учиться и развивать навыки</button>
-            <button class="choice-btn">Пойти работать и зарабатывать</button>
-            <button class="choice-btn">Запустить “гениальную бизнес-идею”</button>
-        </section>
-        
-        <button id="random-btn" class="random-btn">Плыть по течению</button>
 
         <button id="restart-btn" class="restart-btn">Начать заново</button>
     </main>

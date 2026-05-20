@@ -7,114 +7,108 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="page-glow glow-1"></div>
-    <div class="page-glow glow-2"></div>
 
-    <main class="game-container">
-        <nav class="navbar card">
-            <a href="index.html" class="nav-link">Главная</a>
-            <a href="guide.html" class="nav-link">Как играть</a>
-            <a href="endings.html" class="nav-link active">Финалы</a>
+    <main class="container">
+
+        <nav class="menu">
+            <a href="index.html">Игра</a>
+            <a href="guide.html">Как играть</a>
+            <a href="endings.html" class="active">Финалы</a>
         </nav>
 
-        <header class="hero card">
-            <p class="hero-badge">Концовки игры</p>
-            <h1 class="game-title">Возможные финалы</h1>
-            <p class="hero-subtitle">
-                Каждое решение влияет на судьбу героя и приводит к разным итогам.
-            </p>
+        <header class="header">
+            <h1>Финалы игры</h1>
+            <p>Все возможные концовки проекта</p>
         </header>
 
-<section class="endings-grid">
+        <section class="endings-grid">
 
-    <div class="ending-card card legendary-ending">
-        <img src="images/ending-rich.jpg" alt="Финал магната">
-        <div class="ending-content">
-            <span class="ending-badge">Легендарный финал</span>
-            <h2>Ты — магнат</h2>
-            <p>
-                Герой смог пройти путь от обычного студента до человека, который уверенно управляет своей жизнью,
-                зарабатывает большие деньги и имеет сильную репутацию.
-            </p>
-            <ul class="ending-list">
-                <li>Нужно много денег</li>
-                <li>Нужна высокая репутация</li>
-                <li>Важно не потерять всю энергию</li>
-            </ul>
-        </div>
-    </div>
+            <div class="ending-card">
+                <h2>Миллионер</h2>
 
-    <div class="ending-card card epic-ending">
-        <img src="images/ending-pro.jpg" alt="Финал специалиста">
-        <div class="ending-content">
-            <span class="ending-badge">Эпический финал</span>
-            <h2>Успешный специалист</h2>
-            <p>
-                Герой сделал ставку на развитие навыков, работу над собой и постепенный рост.
-                Такой путь приводит к уважению и стабильному профессиональному успеху.
-            </p>
-            <ul class="ending-list">
-                <li>Развивай репутацию</li>
-                <li>Сохраняй нормальный доход</li>
-                <li>Выбирай обучение и проекты</li>
-            </ul>
-        </div>
-    </div>
+                <p>
+                    Игрок смог заработать много денег, сохранить репутацию
+                    и не потерять всю энергию.
+                </p>
 
-    <div class="ending-card card rare-ending">
-        <img src="images/ending-stable.jpg" alt="Стабильный финал">
-        <div class="ending-content">
-            <span class="ending-badge">Редкий финал</span>
-            <h2>Стабильная жизнь</h2>
-            <p>
-                Герой не стал рисковать всем ради огромного успеха, но смог построить спокойную,
-                уверенную и понятную жизнь.
-            </p>
-            <ul class="ending-list">
-                <li>Нужен средний доход</li>
-                <li>Сохраняй энергию</li>
-                <li>Не рискуй слишком часто</li>
-            </ul>
-        </div>
-    </div>
+                <ul>
+                    <li>Много денег</li>
+                    <li>Высокая репутация</li>
+                    <li>Энергия больше 0</li>
+                </ul>
+            </div>
 
-    <div class="ending-card card common-ending">
-        <img src="images/ending-experience.jpg" alt="Финал опыта">
-        <div class="ending-content">
-            <span class="ending-badge">Обычный финал</span>
-            <h2>Опытный герой</h2>
-            <p>
-                Герой пока не достиг большого богатства, но получил знания, опыт и понимание,
-                какие решения помогают двигаться дальше.
-            </p>
-            <ul class="ending-list">
-                <li>Достаточно средней репутации</li>
-                <li>Ошибки тоже дают опыт</li>
-                <li>Можно пройти игру заново</li>
-            </ul>
-        </div>
-    </div>
+            <div class="ending-card">
+                <h2>Уважаемый специалист</h2>
 
-    <div class="ending-card card fail-ending">
-        <img src="images/ending-fail.jpg" alt="Неудачный финал">
-        <div class="ending-content">
-            <span class="ending-badge">Плохой финал</span>
-            <h2>Поражение... но с сюжетом</h2>
-            <p>
-                Не все решения приводят к успеху. Иногда герой слишком рискует, теряет ресурсы
-                или не успевает развить нужные характеристики.
-            </p>
-            <ul class="ending-list">
-                <li>Мало денег</li>
-                <li>Низкая репутация</li>
-                <li>Слишком много ошибок</li>
-            </ul>
-        </div>
-    </div>
+                <p>
+                    Игрок сделал ставку на развитие навыков и репутации.
+                </p>
 
-</section>
+                <ul>
+                    <li>Высокая репутация</li>
+                    <li>Средний доход</li>
+                    <li>Хорошие решения</li>
+                </ul>
+            </div>
 
-<a href="index.html" class="page-button">Вернуться к игре</a>
+            <div class="ending-card">
+                <h2>Стабильная жизнь</h2>
+
+                <p>
+                    Игрок выбрал спокойный путь без больших рисков.
+                </p>
+
+                <ul>
+                    <li>Средние характеристики</li>
+                    <li>Нормальный баланс</li>
+                    <li>Стабильность</li>
+                </ul>
+            </div>
+
+            <div class="ending-card">
+                <h2>Выгорание</h2>
+
+                <p>
+                    Игрок слишком много работал и потерял всю энергию.
+                </p>
+
+                <ul>
+                    <li>Низкая энергия</li>
+                    <li>Переутомление</li>
+                    <li>Неправильный баланс</li>
+                </ul>
+            </div>
+<div class="ending-card">
+    <h2>Богатый одиночка</h2>
+
+    <p>
+        Игрок смог заработать много денег, но потерял часть доверия и репутации.
+    </p>
+
+    <ul>
+        <li>Много денег</li>
+        <li>Низкая репутация</li>
+        <li>Рискованный путь</li>
+    </ul>
+</div>
+
+<div class="ending-card">
+    <h2>Легенда университета</h2>
+
+    <p>
+        Игрок получил очень высокую репутацию и стал примером для других студентов.
+    </p>
+
+    <ul>
+        <li>Очень высокая репутация</li>
+        <li>Хорошие решения</li>
+        <li>Уважение окружающих</li>
+    </ul>
+</div>
+        </section>
+
     </main>
+
 </body>
 </html>
